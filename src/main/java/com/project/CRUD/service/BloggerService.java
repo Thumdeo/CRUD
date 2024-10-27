@@ -1,11 +1,17 @@
 package com.project.CRUD.service;
 import com.project.CRUD.dao.BloggerDao;
 import com.project.CRUD.entity.Blogger;
+import jakarta.persistence.criteria.Path;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.CompletableFuture;
 
 
 @Service
@@ -36,6 +42,22 @@ public class BloggerService {
     public Blogger updateBlogger(Blogger blogger) {
         bloggerDao.findById(blogger.getUserID()).orElseThrow();
         return bloggerDao.save(blogger);
+    }
+
+
+
+
+    @Async
+    public CompletableFuture<String> saveFile(byte[] fileData, String fileName,Integer userID ) {
+        try {
+            File file = new File("uploads/" + fileName);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(fileData);
+            fos.close();
+            return CompletableFuture.completedFuture("File uploaded successfully: " + fileName);
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture("Error uploading file: " + e.getMessage());
+        }
     }
 }
 

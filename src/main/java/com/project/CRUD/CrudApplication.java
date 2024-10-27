@@ -10,14 +10,17 @@ public class CrudApplication {
 
 	public static void main(String[] args) {   SpringApplication.run(CrudApplication.class, args);}
 
-
-//	@EnableAsync
-//
-//	public static void main(String[] args) {
-//			SpringApplication.run(AsyncFileHandlingApplication.class, args);
-//		}
-//
-
-
+	@EnableAsync
+	public class AsyncFileHandlingApplication {
+		public static void main(String[] args) {
+			SpringApplication.run(AsyncFileHandlingApplication.class, args);
+		}
+	}
 
 }
+
+
+
+
+
+
