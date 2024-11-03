@@ -5,19 +5,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
-
+@EnableAsync
 public class CrudApplication {
 
-	public static void main(String[] args) {   SpringApplication.run(CrudApplication.class, args);}
+	public static void main(String[] args) {
+		SpringApplication.run(CrudApplication.class, args);
 
-	@EnableAsync
-	public class AsyncFileHandlingApplication {
-		public static void main(String[] args) {
-			SpringApplication.run(AsyncFileHandlingApplication.class, args);
-		}
 	}
-
 }
+
+
 
 
 

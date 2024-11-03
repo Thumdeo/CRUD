@@ -5,6 +5,9 @@ import com.project.CRUD.entity.Blogger;
 import com.project.CRUD.service.BloggerService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,13 +53,14 @@ public class BloggerController {
     }
 
 
-    @GetMapping("/slow-operation")
-    public String slowOperation() throws InterruptedException {
-        Thread.sleep(5000);
-        return "Slow operation completed";
-    }
+//    @GetMapping("/slow-operation")
+//    public String slowOperation() throws InterruptedException {
+//        Thread.sleep(5000);
+//        return "Slow operation completed";
+//    }
 
-    @PostMapping("/upload/{userID}")
+
+    @PostMapping("/upload/blogger/{userID}")
     public CompletableFuture<ResponseEntity<String>> uploadFile(@RequestParam("file") MultipartFile file  ,@PathVariable Integer userID  ) {
         try {
             byte[] fileData = file.getBytes();
@@ -68,29 +72,24 @@ public class BloggerController {
         }
     }
 
-//    @Value("${file.upload-dir}")
-//    private String uploadDir;
+    @GetMapping("/download/blogger/{userID}")
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable Integer userID) {
+        try {
+            Blogger blogger = bloggerService.getBloggers(userID);
+            byte[] fileData = blogger.getFileData();
+            String fileName = blogger.getFileName();
 
-    // Endpoint for file upload associated with a Blogger
-//    @PostMapping("/upload/{userId}")
-//    public ResponseEntity<String> uploadFile(@RequestParam("fileUpload") MultipartFile file, @PathVariable Integer userId) {
-//        try {
-//            String fileName = BloggerService.storeFile(file, userId);
-//            return ResponseEntity.status(HttpStatus.OK).body("File uploaded successfully: " + fileName);
-//        } catch (IOException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File upload failed!");
-//        }
-//    }
+            ByteArrayResource resource = new ByteArrayResource(fileData);
 
-//    @PostMapping("/{userId}")
-//    public ResponseEntity<String> uploadFile(@RequestParam("fileUpload") MultipartFile file, @PathVariable Integer userId) {
-//        try {
-//            // Call async file upload
-//            BloggerService.storeFileAsync(file, userId);
-//            return ResponseEntity.status(HttpStatus.ACCEPTED).body("File upload started. You will be notified once it's complete.");
-//        } catch (IOException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File upload failed due to an error.");
-//        }
-//    }
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
 
 }

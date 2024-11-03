@@ -29,6 +29,9 @@ public class Blogger {
     private LocalDateTime uploadTime;
 
 
+    @Lob
+    private byte[] fileData;
+
 
     public Blogger() {
     }
@@ -89,6 +92,16 @@ public class Blogger {
         this.blogDislike = blogDislike;
     }
 
+
+    public byte[] getFileData() {
+        return fileData;
+    }
+
+    public void setFileData(byte[] fileData) {
+        this.fileData = fileData;
+    }
+
+
     public String getFileName() {
         return fileName;
     }
@@ -120,7 +133,6 @@ public class Blogger {
     public void setUploadTime(LocalDateTime uploadTime) {
         this.uploadTime = uploadTime;
     }
-
 
 
 // Getters and Setters
