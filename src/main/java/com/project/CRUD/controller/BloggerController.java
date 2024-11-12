@@ -2,20 +2,23 @@ package com.project.CRUD.controller;
 
 import com.project.CRUD.entity.Blogger;
 
+
 import com.project.CRUD.service.BloggerService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+
 @RestController
+@RequestMapping("/blogger")
 public class BloggerController {
 
 
@@ -53,42 +56,31 @@ public class BloggerController {
     }
 
 
-//    @GetMapping("/slow-operation")
-//    public String slowOperation() throws InterruptedException {
-//        Thread.sleep(5000);
-//        return "Slow operation completed";
-//    }
+    @GetMapping("/slow-operation")
+    public String slowOperation() throws InterruptedException {
+        Thread.sleep(5000);
+        return "Slow operation completed";
+    }
 
 
     @PostMapping("/upload/blogger/{userID}")
-    public CompletableFuture<ResponseEntity<String>> uploadFile(@RequestParam("file") MultipartFile file  ,@PathVariable Integer userID  ) {
+    public CompletableFuture<ResponseEntity<String>> uploadFile(
+            @RequestParam("file") MultipartFile file,
+            @PathVariable Integer userID) {
         try {
-            byte[] fileData = file.getBytes();
-            String fileName = file.getOriginalFilename();
-            return  bloggerService.saveFile(fileData, fileName,userID)
-                    .thenApply(result -> ResponseEntity.ok("File uploaded successfully: " + fileName));
+            List<byte[]> fileDataList = List.of(file.getBytes());
+
+            List<String> fileNames = List.of((file.getOriginalFilename() != null) ? file.getOriginalFilename() : "default_filename");
+
+            List<String> fileTypes = List.of((file.getContentType() != null) ? file.getContentType() : "application/octet-stream");
+
+            return bloggerService.saveFiles(fileDataList, fileNames, fileTypes, userID)
+                    .thenApply(ResponseEntity::ok);
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Error uploading file"));
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.badRequest().body("Error uploading file: " + e.getMessage()));
         }
-    }
 
-    @GetMapping("/download/blogger/{userID}")
-    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable Integer userID) {
-        try {
-            Blogger blogger = bloggerService.getBloggers(userID);
-            byte[] fileData = blogger.getFileData();
-            String fileName = blogger.getFileName();
-
-            ByteArrayResource resource = new ByteArrayResource(fileData);
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .body(resource);
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
     }
 
 

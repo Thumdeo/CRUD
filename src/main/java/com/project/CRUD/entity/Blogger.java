@@ -3,13 +3,13 @@ package com.project.CRUD.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
 @Table(name = "blogger")
 public class Blogger {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,18 +23,14 @@ public class Blogger {
 
 
 
-    private String fileName;
-    private long fileSize;
-    private String fileType;
-    private LocalDateTime uploadTime;
 
-
-    @Lob
-    private byte[] fileData;
+    @OneToMany(mappedBy = "blogger", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FileData> files = new ArrayList<>();
 
 
     public Blogger() {
     }
+
 
     public Integer getUserID() {
         return userID;
@@ -91,49 +87,14 @@ public class Blogger {
     public void setBlogDislike(String blogDislike) {
         this.blogDislike = blogDislike;
     }
-
-
-    public byte[] getFileData() {
-        return fileData;
+    public List<FileData> getFiles() {
+        return files;
     }
 
-    public void setFileData(byte[] fileData) {
-        this.fileData = fileData;
+    public void setFiles(List<FileData> files) {
+        this.files = files;
     }
 
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public String getFileType() {
-        return fileType;
-    }
-
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
-
-    public LocalDateTime getUploadTime() {
-        return uploadTime;
-    }
-
-    public void setUploadTime(LocalDateTime uploadTime) {
-        this.uploadTime = uploadTime;
-    }
-
-
-// Getters and Setters
 }
+
+

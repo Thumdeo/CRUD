@@ -1,6 +1,9 @@
 package com.project.CRUD.service;
 import com.project.CRUD.dao.BloggerDao;
+import com.project.CRUD.dao.FileDataRepository;
 import com.project.CRUD.entity.Blogger;
+//import com.project.CRUD.entity.FileData;
+import com.project.CRUD.entity.FileData;
 import jakarta.persistence.criteria.Path;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,9 @@ import java.util.concurrent.CompletableFuture;
 public class BloggerService {
     @Autowired
     private BloggerDao bloggerDao;
+
+    @Autowired
+    private FileDataRepository fileDataRepository;
 
 //    private final Path root = Paths.get("uploads");
 
@@ -46,96 +53,44 @@ public class BloggerService {
     }
 
 
-//    @Async
-//    public CompletableFuture<String> saveFile(byte[] fileData, String fileName,Integer userID ) {
-//        try {
-//            File file = new File("uploads/" + fileName);
-//            FileOutputStream fos = new FileOutputStream(file);
-//            fos.write(fileData);
-//            fos.close();
-//            return CompletableFuture.completedFuture("File uploaded successfully: " + fileName);
-//        } catch (Exception e) {
-//            return CompletableFuture.completedFuture("Error uploading file: " + e.getMessage());
-//        }
-//    }
-
     @Async
-    public CompletableFuture<String> saveFile(byte[] fileData, String fileName,Integer userID ) {
-        try {
-            Blogger blogger = bloggerDao.findById(userID).orElseThrow(() -> new RuntimeException("Blogger not found"));
+    public CompletableFuture<String> saveFiles(List<byte[]> fileDataList, List<String> fileNames, List<String> fileTypes, Integer userID) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                Blogger blogger = bloggerDao.findById(userID)
+                        .orElseThrow(() -> new RuntimeException("Blogger not found"));
 
-            // Set the file data in the Blogger entity
-            blogger.setFileData(fileData);
-            blogger.setFileName(fileName);
+                List<FileData> fileDataListToSave = new ArrayList<>();
 
-            // Save the updated Blogger entity
-            bloggerDao.save(blogger);
+                for (int i = 0; i < fileDataList.size(); i++) {
+                    byte[] fileData = fileDataList.get(i);
+                    String fileName = fileNames.get(i);
+                    String fileType = fileTypes.get(i);
 
-            return CompletableFuture.completedFuture("File uploaded successfully: " + fileName);
+                    // Create a new FileData object for each file
+                    FileData file = new FileData();
+                    file.setFileData(fileData);
+                    file.setFileName(fileName);
+                    file.setFileType(fileType);
+                    file.setBlogger(blogger);  // Associate the file with the blogger
 
-        } catch (Exception e) {
-            return CompletableFuture.completedFuture("Error uploading file: " + e.getMessage());
-        }
+                    // Add the file to the list
+                    fileDataListToSave.add(file);
+                }
+
+                // Save all FileData objects to the database in one batch
+                fileDataRepository.saveAll(fileDataListToSave);
+
+                return "Files uploaded successfully!";
+            } catch (Exception e) {
+                throw new RuntimeException("File upload failed: " + e.getMessage());
+            }
+        });
     }
+
+
+
+
 }
 
 
-
-//    public String storeFile(MultipartFile file, Integer userId) throws IOException {
-//        // Ensure the directory exists
-//        if (!Files.exists(root)) {
-//            Files.createDirectories(root);
-//        }
-//
-//        // Get the file name
-//        String fileName = file.getOriginalFilename();
-//
-//        // Check if fileName is null or empty
-//        if (fileName == null || fileName.isEmpty()) {
-//            throw new IOException("File name is invalid or empty.");
-//        }
-//
-//        // Ensure uniqueness by appending a timestamp or userId to avoid overwriting
-//        fileName = userId + "_" + System.currentTimeMillis() + "_" + fileName;
-//
-//        // Resolve the file path and copy the file
-//        Path filePath = root.resolve(fileName);
-//        Files.copy(file.getInputStream(), filePath);
-//
-//        // Update the blogger entity with the uploaded file name
-//        Blogger blogger = getBloggers(userId);
-//        blogger.setFileUpload(fileName);
-//        saveblogger(blogger);
-//
-//        return fileName;
-//    }
-
-
-
-//
-//    @Async
-//    public void storeFileAsync(MultipartFile file, Integer userId) throws IOException {
-//        // Ensure the directory exists
-//        if (!Files.exists(root)) {
-//            Files.createDirectories(root);
-//        }
-//
-//        // Get the file name
-//        String fileName = file.getOriginalFilename();
-//
-//        if (fileName == null || fileName.isEmpty()) {
-//            throw new IOException("File name is invalid or empty.");
-//        }
-//
-//        // Ensure a unique file name to avoid overwriting
-//        fileName = userId + "_" + System.currentTimeMillis() + "_" + fileName;
-//
-//        // Save the file asynchronously
-//        Path filePath = root.resolve(fileName);
-//        Files.copy(file.getInputStream(), filePath);
-//
-//
-//        System.out.println("File uploaded successfully: " + fileName);
-//    }
-//
-//}
