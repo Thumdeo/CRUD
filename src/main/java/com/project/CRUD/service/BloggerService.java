@@ -7,8 +7,11 @@ import com.project.CRUD.entity.FileData;
 import jakarta.persistence.criteria.Path;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -86,6 +89,26 @@ public class BloggerService {
                 throw new RuntimeException("File upload failed: " + e.getMessage());
             }
         });
+    }
+    public byte[] getFileData(Integer fileID, Integer userID) {
+        // Retrieve file data from the database
+        FileData fileData = fileDataRepository.findById(fileID)
+                .orElseThrow(() -> new RuntimeException("File not found"));
+
+        // Check if the file is associated with the correct blogger (userID)
+        if (!fileData.getBlogger().getUserID().equals(userID)) {
+            throw new RuntimeException("Unauthorized access to this file");
+        }
+
+        return fileData.getFileData();  // Return the file content as byte array
+    }
+
+    public List<FileData> getAllFilesForUser(Integer userID) {
+        Blogger blogger = bloggerDao.findById(userID)
+                .orElseThrow(() -> new RuntimeException("Blogger not found"));
+
+        // Assuming `FileData` has a relationship to `Blogger`
+        return fileDataRepository.findByBlogger(blogger); // Retrieves all files for the blogger
     }
 
 
