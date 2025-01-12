@@ -2,7 +2,7 @@ I am Dumb
 
 localhost server request format: http://localhost:9090/blogger/get/blogger
 
-Latest Json file format for making request in postman:
+Latest Json request body format for making request in postman:
 {
   "userName": "John Doe",
   "title": "My Blog Title",
