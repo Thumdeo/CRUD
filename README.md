@@ -1,26 +1,13 @@
 I am Dumb
-http://localhost:9090/blogger/get/blogger
 
+localhost server request format: http://localhost:9090/blogger/get/blogger
+
+Latest Json file format for making request in postman:
 {
-   "userName": "Badmax",
-    "title": "htkkyvkuyvu",
-    "blogComment": "cjtftjyut",
-    "blogLikes": "cjyutfjyu",
-    "blogDislike": "cyjtjyt"
-}
-
-
-
-
-
-{
-   "userName": "Badmax",
-    "title": "htkkyvkuyvu",
-    "blogPost": "ctytyutuk",
-    "fileUpload": "cyjhcukjyf",
-    "blogComment": "cjtftjyut",
-    "blogLikes": "cjyutfjyu",
-    "blogDislike": "cyjtjyt"
-    
-
+  "userName": "John Doe",
+  "title": "My Blog Title",
+  "blogPost": "This is a blog post content.",
+  "blogComment": "Interesting post!",
+  "blogLikes": "50",
+  "blogDislike": "5"
 }
