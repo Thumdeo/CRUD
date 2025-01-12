@@ -8,3 +8,14 @@ http://localhost:9090/blogger/get/blogger
     "blogLikes": "cjyutfjyu",
     "blogDislike": "cyjtjyt"
 }
+{
+   "userName": "Badmax",
+    "title": "htkkyvkuyvu",
+    "blogPost": "ctytyutuk",
+    "fileUpload": "cyjhcukjyf",
+    "blogComment": "cjtftjyut",
+    "blogLikes": "cjyutfjyu",
+    "blogDislike": "cyjtjyt"
+    
+
+}
