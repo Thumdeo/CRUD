@@ -1,9 +1,9 @@
 I am Dumb
 
-
-Implementing Springboot security 
+Implementing Springboot security:
 1.Implementing basic Registeration.
 2.Implementing basic Authentication.
+3.Implemented basic custom validator.
 
 
 Tutorial or guide :- https://spring.io/guides
