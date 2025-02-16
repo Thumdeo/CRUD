@@ -1,5 +1,11 @@
 I am Dumb
 
+Implementing Springboot security:
+1.Implementing basic Registeration.
+2.Implementing basic Authentication.
+3.Implemented basic custom validator.
+
+
 Tutorial or guide :- https://spring.io/guides
 
 localhost server request format: http://localhost:9090/blogger/get/blogger
