@@ -71,8 +71,9 @@ Click OK to save all changes.
 
 Custom Validators are used to make sure that the input taken are to be valid by the latest preferences.
 
-## _Email Validator:_ Despite already available email validators there are some important reasons for using custom email validator. 
+## __Email Validator:__ 
 
+Despite already available email validators there are some important reasons for using custom email validator.
 Being hiberante email validator it has some old refernces which are not suitable for present requirements, additionally 
 to ensure we can customize our email field suitable according to our requirement.
 EX:we’re rolling our own custom annotation instead of Hibernate’s 
