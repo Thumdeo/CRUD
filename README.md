@@ -39,7 +39,7 @@ Latest Json request body format for making request in postman:
 
 OR 
 
-# _A . Use Maven in IntelliJ IDEA using file setup_
+# _B . Use Maven in IntelliJ IDEA using file setup_
 1.  Extract the ZIP File
     Locate the downloaded maven-x.x.x-bin.zip file.
     Extract it to a directory on your computer (e.g., C:\Program Files\Maven or D:\Tools\Maven).
