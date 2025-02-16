@@ -22,9 +22,13 @@ Latest Json request body format for making request in postman:
 }
 
 ********************************************************////////////////////////////////////////////////**********************************************************
-**set up Maven intellij IDEA
+
+# ****set up Maven intellij IDEA**
+
 **
-A . Use Maven in IntelliJ IDEA
+
+# A . _Use Maven in IntelliJ IDEA_
+
 1. Open IntelliJ IDEA.
 2. Go to File > Settings > Build, Execution, Deployment > Build Tools > Maven.
 3. Set the Maven Home Directory:
@@ -35,7 +39,7 @@ A . Use Maven in IntelliJ IDEA
 
 OR 
 
-A . Use Maven in IntelliJ IDEA using file setup
+# _A . Use Maven in IntelliJ IDEA using file setup_
 1.  Extract the ZIP File
     Locate the downloaded maven-x.x.x-bin.zip file.
     Extract it to a directory on your computer (e.g., C:\Program Files\Maven or D:\Tools\Maven).
@@ -59,6 +63,24 @@ Save and Close:
 
 Click OK to save all changes.
 
-*********************************************************************************************************************************************************************************************///////////////////////////////////////////////////////////////////////////////////////////************************************************
+*******************************************************************************************************************************
+********************///////////////////////////////////////////////////////////////////////////////////////////************************************************
+
+
+# **Custom Validators:**
+
+Custom Validators are used to make sure that the input taken are to be valid by the latest preferences.
+
+## _Email Validator:_ Despite already available email validators there are some important reasons for using custom email validator. 
+
+Being hiberante email validator it has some old refernces which are not suitable for present requirements, additionally 
+to ensure we can customize our email field suitable according to our requirement.
+EX:we’re rolling our own custom annotation instead of Hibernate’s 
+@Email because Hibernate considers the old intranet addresses format,
+myaddress@myserver, as valid (see Stackoverflow article), which isn’t good.
+
+(Reference: Baeldong.)
+
+
 
 

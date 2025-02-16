@@ -1,16 +1,15 @@
 package com.project.CRUD.controller;
 
+import org.springframework.ui.Model;
+import com.project.CRUD.DTO.DTO;
 import com.project.CRUD.entity.Blogger;
-
-
 import com.project.CRUD.entity.FileData;
 import com.project.CRUD.service.BloggerService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,6 +29,13 @@ public class BloggerController {
     @Autowired
     private BloggerService bloggerService;
 
+    @GetMapping("user/registration")
+    public String showRegistrationForm(WebRequest request, Model model){
+        DTO dto = new DTO();
+        model.addAttribute("user",dto);
+        return "registration";
+
+    }
 
     @PostMapping("/save/blogger")
     public Blogger saveblogger(@RequestBody Blogger blogger) {
@@ -66,7 +72,6 @@ public class BloggerController {
         Thread.sleep(5000);
         return "Slow operation completed";
     }
-
 
     @PostMapping("/upload/blogger/{userID}")
     public CompletableFuture<ResponseEntity<String>> uploadFile(
